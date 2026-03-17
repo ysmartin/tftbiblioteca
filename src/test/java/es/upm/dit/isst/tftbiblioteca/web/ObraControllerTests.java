@@ -33,7 +33,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import es.upm.dit.isst.tftbiblioteca.domain.Obra;
 import es.upm.dit.isst.tftbiblioteca.domain.ObraRepository;
 
-@WebMvcTest(ObraController.class)
+/**
+ * Pruebas unitarias del controlador manual <code>/biblioteca/obras</code> usando
+ * {@link WebMvcTest} para validar el contrato REST sin arrancar otros beans.
+ */
+@WebMvcTest(ObraController.class) // levanta únicamente la capa MVC y mockea el resto
 class ObraControllerTests {
 
     @Autowired
@@ -42,9 +46,10 @@ class ObraControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockBean // reemplaza el bean real por un mock para aislar la capa web
     private ObraRepository obraRepository;
 
+    /** Comprueba el listado completo cuando no se aplica filtro de autor. */
     @Test
     void listaTodasLasObras() throws Exception {
         when(obraRepository.findAll()).thenReturn(List.of(
@@ -58,6 +63,7 @@ class ObraControllerTests {
                 .andExpect(jsonPath("$[1].id", is(2)));
     }
 
+    /** Verifica que el parámetro <code>autor</code> filtra en el repositorio. */
     @Test
     void filtraPorAutor() throws Exception {
         when(obraRepository.findByAutorContainingIgnoreCase("Borges")).thenReturn(List.of(
@@ -69,6 +75,7 @@ class ObraControllerTests {
                 .andExpect(jsonPath("$[0].autor", is("Jorge Luis Borges")));
     }
 
+    /** Responde con 200 y el JSON esperado al consultar una obra existente. */
     @Test
     void consultaUnaObraPorId() throws Exception {
         when(obraRepository.findById(7L)).thenReturn(Optional.of(
@@ -80,6 +87,7 @@ class ObraControllerTests {
                 .andExpect(jsonPath("$.titulo", is("Frankenstein")));
     }
 
+    /** Responde 404 cuando el id solicitado no está en la base de datos. */
     @Test
     void devuelve404SiLaObraNoExiste() throws Exception {
         when(obraRepository.findById(99L)).thenReturn(Optional.empty());
@@ -88,6 +96,10 @@ class ObraControllerTests {
                 .andExpect(status().isNotFound());
     }
 
+    /**
+     * Crea una obra válida y comprueba que se asigna id, cabecera Location y se
+     * ocultan los campos calculados en la respuesta.
+     */
     @Test
     void creaObraValida() throws Exception {
         when(obraRepository.save(any(Obra.class))).thenAnswer(invocation -> {
@@ -96,15 +108,18 @@ class ObraControllerTests {
             return obra;
         });
 
-        CrearObraRequest request = new CrearObraRequest(
-                "Mary Shelley",
-                "Frankenstein",
-                "Novela gotica sobre ciencia y responsabilidad.",
-                List.of("gotico", "ciencia", "clasico"));
+        String request = """
+                {
+                  "autor": "Mary Shelley",
+                  "titulo": "Frankenstein",
+                  "resumen": "Novela gotica sobre ciencia y responsabilidad.",
+                  "palabrasClave": ["gotico", "ciencia", "clasico"]
+                }
+                """;
 
         mockMvc.perform(post("/biblioteca/obras")
                         .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(request)))
+                        .content(request))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/biblioteca/obras/15"))
                 .andExpect(jsonPath("$.id", is(15)))
@@ -112,6 +127,7 @@ class ObraControllerTests {
                 .andExpect(jsonPath("$.urlCopiaDigital").doesNotExist());
     }
 
+    /** Rechaza el alta con datos que violan Bean Validation devolviendo 400. */
     @Test
     void rechazaAltaConCamposInvalidos() throws Exception {
         String requestInvalido = """
@@ -129,6 +145,7 @@ class ObraControllerTests {
                 .andExpect(status().isBadRequest());
     }
 
+    /** Permite subir un PDF nuevo para una obra existente y devuelve 200. */
     @Test
     void subePdfValido() throws Exception {
         Obra obra = obra(4L, "Autor", "Titulo", "Resumen", List.of("clave"), null, null);
@@ -143,6 +160,10 @@ class ObraControllerTests {
                 .andExpect(jsonPath("$.urlCopiaDigital", is("/biblioteca/obras/4/digital")));
     }
 
+    /**
+     * Al reemplazar un PDF existente, la fecha de depósito se actualiza y el
+     * binario guardado coincide con el enviado.
+     */
     @Test
     void reemplazaPdfYActualizaFechaDeposito() throws Exception {
         Obra obra = obra(8L, "Autor", "Titulo", "Resumen", List.of("clave"), new byte[] { 9 }, LocalDate.of(2025, 1, 1));
@@ -162,6 +183,7 @@ class ObraControllerTests {
         org.assertj.core.api.Assertions.assertThat(guardada.getFechaDeposito()).isEqualTo(LocalDate.now());
     }
 
+    /** Devuelve 404 al intentar subir un PDF para una obra inexistente. */
     @Test
     void devuelve404AlSubirSiLaObraNoExiste() throws Exception {
         when(obraRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -172,6 +194,7 @@ class ObraControllerTests {
                 .andExpect(status().isNotFound());
     }
 
+    /** Devuelve 404 al descargar si la obra no existe. */
     @Test
     void devuelve404AlDescargarSiLaObraNoExiste() throws Exception {
         when(obraRepository.findById(66L)).thenReturn(Optional.empty());
@@ -180,6 +203,7 @@ class ObraControllerTests {
                 .andExpect(status().isNotFound());
     }
 
+    /** Devuelve 404 al descargar cuando la obra existe pero no tiene PDF. */
     @Test
     void devuelve404AlDescargarSiNoHayPdf() throws Exception {
         when(obraRepository.findById(5L)).thenReturn(Optional.of(
@@ -189,6 +213,7 @@ class ObraControllerTests {
                 .andExpect(status().isNotFound());
     }
 
+    /** Descarga correcta: cabecera de attachment y contenido binario intacto. */
     @Test
     void descargaPdfConCabecerasCorrectas() throws Exception {
         byte[] pdf = new byte[] { 10, 20, 30 };
@@ -202,6 +227,10 @@ class ObraControllerTests {
                 .andExpect(content().bytes(pdf));
     }
 
+    /**
+     * Helper para construir objetos de dominio sin repetir inicialización en
+     * cada test del controlador.
+     */
     private static Obra obra(Long id, String autor, String titulo, String resumen, List<String> palabrasClave,
             byte[] pdf, LocalDate fechaDeposito) {
         Obra obra = Obra.builder()

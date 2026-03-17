@@ -12,8 +12,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import es.upm.dit.isst.tftbiblioteca.domain.ObraRepository;
 
+/**
+ * Smoke tests que verifican que la aplicación arranca con los datos de demo y
+ * que las superficies HTTP (Data REST y Swagger UI) quedan expuestas.
+ */
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc // inyecta MockMvc para probar endpoints reales sin levantar servidor externo
 class TftbibliotecaApplicationTests {
 
 	@Autowired
@@ -22,11 +26,16 @@ class TftbibliotecaApplicationTests {
 	@Autowired
 	private MockMvc mockMvc;
 
+	/** Garantiza que el seeding de {@link es.upm.dit.isst.tftbiblioteca.config.BibliotecaDataLoader} se ejecuta. */
 	@Test
 	void cargaElContextoYLosDatosDemo() {
 		assertThat(obraRepository.count()).isGreaterThanOrEqualTo(4);
 	}
 
+	/**
+	 * Comprueba que la exposición automática de Spring Data REST y el contrato
+	 * OpenAPI generados por springdoc están accesibles en tiempo de arranque.
+	 */
 	@Test
 	void exponeSpringDataRestYSwaggerUi() throws Exception {
 		mockMvc.perform(get("/api/obras"))

@@ -13,10 +13,20 @@ import org.springframework.core.io.ClassPathResource;
 import es.upm.dit.isst.tftbiblioteca.domain.Obra;
 import es.upm.dit.isst.tftbiblioteca.domain.ObraRepository;
 
-@Configuration
+/**
+ * Configuración que añade datos de demostración al iniciar la aplicación. En un
+ * proyecto docente permite probar los endpoints REST sin pasos manuales de
+ * alta previa.
+ */
+@Configuration // registra beans adicionales de arranque
 public class BibliotecaDataLoader {
 
-    @Bean
+    /**
+     * Bean que se ejecuta al arrancar la aplicación y pobla la base de datos si
+     * está vacía. Actúa como sustituto de un script de migraciones para escenarios
+     * demo.
+     */
+    @Bean // registra un CommandLineRunner que se ejecuta tras arrancar el contexto
     CommandLineRunner cargarObrasDemo(ObraRepository obraRepository) {
         return args -> {
             if (obraRepository.count() > 0) {
@@ -58,6 +68,10 @@ public class BibliotecaDataLoader {
         };
     }
 
+    /**
+     * Lee el PDF incluido en <code>src/main/resources/documents/</code> para
+     * reutilizarlo como binario de ejemplo en las obras precargadas.
+     */
     private byte[] cargarPdfDemo() {
         try {
             return new ClassPathResource("documents/obra-demo.pdf").getInputStream().readAllBytes();

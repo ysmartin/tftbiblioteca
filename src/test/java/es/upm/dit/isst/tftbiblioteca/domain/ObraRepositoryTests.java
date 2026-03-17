@@ -9,12 +9,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-@DataJpaTest
+/**
+ * Pruebas de persistencia que validan el comportamiento del repositorio JPA y
+ * su consulta derivada por autor.
+ */
+@DataJpaTest // configura un slice de JPA en memoria para tests rápidos
 class ObraRepositoryTests {
 
     @Autowired
     private ObraRepository obraRepository;
 
+    /** Comprueba que se persisten obras con y sin varias palabras clave. */
     @Test
     void persisteYRecuperaObrasConYsinPalabrasClave() {
         Obra primera = obraRepository.save(Obra.builder()
@@ -43,6 +48,7 @@ class ObraRepositoryTests {
                         org.assertj.core.groups.Tuple.tuple("Titulo Dos", 1));
     }
 
+    /** Verifica la consulta derivada ignorando mayúsculas y minúsculas. */
     @Test
     void filtraPorAutorIgnorandoMayusculas() {
         obraRepository.save(Obra.builder()
@@ -72,6 +78,7 @@ class ObraRepositoryTests {
                 .containsExactlyInAnyOrder("Cien anos de soledad", "El coronel no tiene quien le escriba");
     }
 
+    /** Devuelve lista vacía cuando no hay coincidencias para el autor buscado. */
     @Test
     void devuelveListaVaciaSiNoHayCoincidencias() {
         obraRepository.save(Obra.builder()

@@ -1,0 +1,95 @@
+22:15:30.114 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [es.upm.dit.isst.tftbiblioteca.TftbibliotecaApplicationTests]: TftbibliotecaApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+22:15:30.318 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration es.upm.dit.isst.tftbiblioteca.TftbibliotecaApplication for test class es.upm.dit.isst.tftbiblioteca.TftbibliotecaApplicationTests
+22:15:30.647 [main] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.11)
+
+2026-03-16T22:15:31.166+01:00  INFO 33788 --- [tftbiblioteca] [           main] e.u.d.i.t.TftbibliotecaApplicationTests  : Starting TftbibliotecaApplicationTests using Java 17.0.10 with PID 33788 (started by samuelm in C:\Users\samuelm\Documents\Docencia\ISST\2026\WebTFT\tftbiblioteca)
+2026-03-16T22:15:31.169+01:00  INFO 33788 --- [tftbiblioteca] [           main] e.u.d.i.t.TftbibliotecaApplicationTests  : No active profile set, falling back to 1 default profile: "default"
+2026-03-16T22:15:33.879+01:00  INFO 33788 --- [tftbiblioteca] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16T22:15:34.042+01:00  INFO 33788 --- [tftbiblioteca] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 128 ms. Found 1 JPA repository interface.
+2026-03-16T22:15:35.642+01:00  INFO 33788 --- [tftbiblioteca] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16T22:15:35.896+01:00  INFO 33788 --- [tftbiblioteca] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.42.Final
+2026-03-16T22:15:36.071+01:00  INFO 33788 --- [tftbiblioteca] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-03-16T22:15:37.201+01:00  INFO 33788 --- [tftbiblioteca] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16T22:15:37.275+01:00  INFO 33788 --- [tftbiblioteca] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-03-16T22:15:37.707+01:00  INFO 33788 --- [tftbiblioteca] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:tftbiblioteca user=SA
+2026-03-16T22:15:37.711+01:00  INFO 33788 --- [tftbiblioteca] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-03-16T22:15:37.872+01:00  INFO 33788 --- [tftbiblioteca] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+Hibernate: create global temporary table HTE_obras(fecha_deposito date, rn_ integer not null, id bigint, autor varchar(200), titulo varchar(250), resumen varchar(4000), copia_digital_pdf blob, primary key (rn_)) TRANSACTIONAL
+2026-03-16T22:15:39.894+01:00  INFO 33788 --- [tftbiblioteca] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: drop table if exists obra_palabras_clave cascade 
+Hibernate: drop table if exists obras cascade 
+Hibernate: drop sequence if exists obras_seq
+Hibernate: create sequence obras_seq start with 1 increment by 50
+Hibernate: create table obra_palabras_clave (obra_id bigint not null, palabra_clave varchar(255) not null)
+Hibernate: create table obras (fecha_deposito date, id bigint not null, autor varchar(200) not null, titulo varchar(250) not null, resumen varchar(4000) not null, copia_digital_pdf blob, primary key (id))
+Hibernate: alter table if exists obra_palabras_clave add constraint FKkdw4jijt3cl7efqfn8brwl3u7 foreign key (obra_id) references obras
+2026-03-16T22:15:39.969+01:00  INFO 33788 --- [tftbiblioteca] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16T22:15:41.059+01:00  WARN 33788 --- [tftbiblioteca] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-16T22:15:42.741+01:00  INFO 33788 --- [tftbiblioteca] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:tftbiblioteca'
+2026-03-16T22:15:42.886+01:00  INFO 33788 --- [tftbiblioteca] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-03-16T22:15:42.886+01:00  INFO 33788 --- [tftbiblioteca] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-03-16T22:15:42.891+01:00  INFO 33788 --- [tftbiblioteca] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2026-03-16T22:15:42.978+01:00  INFO 33788 --- [tftbiblioteca] [           main] e.u.d.i.t.TftbibliotecaApplicationTests  : Started TftbibliotecaApplicationTests in 12.351 seconds (process running for 14.258)
+Hibernate: select count(*) from obras o1_0
+Hibernate: select next value for obras_seq
+Hibernate: select next value for obras_seq
+Hibernate: insert into obras (autor,copia_digital_pdf,fecha_deposito,resumen,titulo,id) values (?,?,?,?,?,?)
+Hibernate: insert into obras (autor,copia_digital_pdf,fecha_deposito,resumen,titulo,id) values (?,?,?,?,?,?)
+Hibernate: insert into obras (autor,copia_digital_pdf,fecha_deposito,resumen,titulo,id) values (?,?,?,?,?,?)
+Hibernate: insert into obras (autor,copia_digital_pdf,fecha_deposito,resumen,titulo,id) values (?,?,?,?,?,?)
+Hibernate: insert into obra_palabras_clave (obra_id,palabra_clave) values (?,?)
+Hibernate: insert into obra_palabras_clave (obra_id,palabra_clave) values (?,?)
+Hibernate: insert into obra_palabras_clave (obra_id,palabra_clave) values (?,?)
+Hibernate: insert into obra_palabras_clave (obra_id,palabra_clave) values (?,?)
+Hibernate: insert into obra_palabras_clave (obra_id,palabra_clave) values (?,?)
+Hibernate: insert into obra_palabras_clave (obra_id,palabra_clave) values (?,?)
+Hibernate: insert into obra_palabras_clave (obra_id,palabra_clave) values (?,?)
+Hibernate: insert into obra_palabras_clave (obra_id,palabra_clave) values (?,?)
+Hibernate: insert into obra_palabras_clave (obra_id,palabra_clave) values (?,?)
+Hibernate: insert into obra_palabras_clave (obra_id,palabra_clave) values (?,?)
+Hibernate: insert into obra_palabras_clave (obra_id,palabra_clave) values (?,?)
+2026-03-16T22:15:44.037+01:00  WARN 33788 --- [tftbiblioteca] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-03-16T22:15:44.038+01:00  WARN 33788 --- [tftbiblioteca] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+Hibernate: select o1_0.id,o1_0.autor,o1_0.copia_digital_pdf,o1_0.fecha_deposito,o1_0.resumen,o1_0.titulo from obras o1_0
+Hibernate: select pc1_0.obra_id,pc1_0.palabra_clave from obra_palabras_clave pc1_0 where pc1_0.obra_id=?
+Hibernate: select pc1_0.obra_id,pc1_0.palabra_clave from obra_palabras_clave pc1_0 where pc1_0.obra_id=?
+Hibernate: select pc1_0.obra_id,pc1_0.palabra_clave from obra_palabras_clave pc1_0 where pc1_0.obra_id=?
+Hibernate: select pc1_0.obra_id,pc1_0.palabra_clave from obra_palabras_clave pc1_0 where pc1_0.obra_id=?
+2026-03-16T22:15:46.465+01:00  INFO 33788 --- [tftbiblioteca] [           main] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 927 ms
+Hibernate: select count(*) from obras o1_0
+2026-03-16T22:15:46.847+01:00  INFO 33788 --- [tftbiblioteca] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [es.upm.dit.isst.tftbiblioteca.web.ObraControllerTests]: ObraControllerTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-16T22:15:46.961+01:00  INFO 33788 --- [tftbiblioteca] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration es.upm.dit.isst.tftbiblioteca.TftbibliotecaApplication for test class es.upm.dit.isst.tftbiblioteca.web.ObraControllerTests
+2026-03-16T22:15:46.976+01:00  INFO 33788 --- [tftbiblioteca] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.11)
+
+2026-03-16T22:15:47.071+01:00  INFO 33788 --- [tftbiblioteca] [           main] e.u.d.i.t.web.ObraControllerTests        : Starting ObraControllerTests using Java 17.0.10 with PID 33788 (started by samuelm in C:\Users\samuelm\Documents\Docencia\ISST\2026\WebTFT\tftbiblioteca)
+2026-03-16T22:15:47.071+01:00  INFO 33788 --- [tftbiblioteca] [           main] e.u.d.i.t.web.ObraControllerTests        : No active profile set, falling back to 1 default profile: "default"
+2026-03-16T22:15:48.357+01:00  INFO 33788 --- [tftbiblioteca] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-03-16T22:15:48.358+01:00  INFO 33788 --- [tftbiblioteca] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-03-16T22:15:48.361+01:00  INFO 33788 --- [tftbiblioteca] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 3 ms
+2026-03-16T22:15:48.393+01:00  INFO 33788 --- [tftbiblioteca] [           main] e.u.d.i.t.web.ObraControllerTests        : Started ObraControllerTests in 1.419 seconds (process running for 19.672)
